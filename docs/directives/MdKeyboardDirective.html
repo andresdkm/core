@@ -575,7 +575,7 @@
                             </tr>
                                     <tr>
                                         <td class="col-md-4">
-                                            <div class="io-line">Defined in <a href="" data-line="45" class="link-to-prism">src/directives/keyboard.directive.ts:45</a></div>
+                                            <div class="io-line">Defined in <a href="" data-line="46" class="link-to-prism">src/directives/keyboard.directive.ts:46</a></div>
                                         </td>
                                     </tr>
             
@@ -644,6 +644,9 @@
                                         <em>Type:</em>    <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
 
                                       </p>
+                                    <p>
+                                      <em>Default value: </em><code>true</code>
+                                    </p>
                                 </td>
                             </tr>
                                     <tr>
@@ -728,6 +731,9 @@
                                         <em>Type:</em>    <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
 
                                       </p>
+                                    <p>
+                                      <em>Default value: </em><code>es</code>
+                                    </p>
                                 </td>
                             </tr>
                                     <tr>
@@ -764,7 +770,7 @@
             
                                     <tr>
                                         <td class="col-md-4">
-                                            <div class="io-line">Defined in <a href="" data-line="41" class="link-to-prism">src/directives/keyboard.directive.ts:41</a></div>
+                                            <div class="io-line">Defined in <a href="" data-line="42" class="link-to-prism">src/directives/keyboard.directive.ts:42</a></div>
                                         </td>
                                     </tr>
             
@@ -819,9 +825,9 @@ export class MdKeyboardDirective {
 
   private _keyboardRef: MdKeyboardRef&lt;MdKeyboardComponent&gt;;
 
-  @Input() mdKeyboard: string;
+  @Input() mdKeyboard: string &#x3D; &#x27;es&#x27;;
 
-  @Input() darkTheme: boolean;
+  @Input() darkTheme: boolean &#x3D; true;
 
   @Input() duration: number;
 
@@ -840,6 +846,7 @@ export class MdKeyboardDirective {
         hasAction: this.hasAction,
         isDebug: this.isDebug
       });
+      console.log(this._elementRef);
       this._keyboardRef.instance.setInputInstance(this._elementRef, this._control);
     }
 

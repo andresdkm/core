@@ -32,6 +32,7 @@ export class MdKeyboardDirective {
         hasAction: this.hasAction,
         isDebug: this.isDebug
       });
+      console.log(this._elementRef);
       this._keyboardRef.instance.setInputInstance(this._elementRef, this._control);
     }
 

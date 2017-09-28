@@ -35236,12 +35236,7 @@ class MdKeyboardKeyComponent {
         if (!this.input) {
             return;
         }
-        if (this.control && this.control.value) {
-            this.inputValue = this.control.value;
-        }
-        else {
-            this.inputValue = '';
-        }
+        this.inputValue = this.control.value;
         // ^ this is used to not only get "focus", but
         // to make sure we don't have it everything -selected-
         // (it causes an issue in chrome, and having it doesn't hurt any other browser)
@@ -35380,6 +35375,7 @@ class MdKeyboardDirective {
                 hasAction: this.hasAction,
                 isDebug: this.isDebug
             });
+            console.log(this._elementRef);
             this._keyboardRef.instance.setInputInstance(this._elementRef, this._control);
         }
     }
