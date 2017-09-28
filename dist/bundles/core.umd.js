@@ -35427,7 +35427,12 @@ var MdKeyboardKeyComponent = /** @class */ (function () {
         if (!this.input) {
             return;
         }
-        this.inputValue = this.control.value;
+        if (this.control && this.control.value) {
+            this.inputValue = this.control.value;
+        }
+        else {
+            this.inputValue = '';
+        }
         // ^ this is used to not only get "focus", but
         // to make sure we don't have it everything -selected-
         // (it causes an issue in chrome, and having it doesn't hurt any other browser)
