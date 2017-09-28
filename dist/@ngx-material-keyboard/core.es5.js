@@ -35515,6 +35515,8 @@ var MdKeyboardDirective = /** @class */ (function () {
         this._elementRef = _elementRef;
         this._keyboardService = _keyboardService;
         this._control = _control;
+        this.mdKeyboard = 'es';
+        this.darkTheme = true;
     }
     /**
      * @return {?}
@@ -35599,6 +35601,8 @@ var MdKeyboardModelDirective = /** @class */ (function () {
         this._keyboardService = _keyboardService;
         this._model = _model;
         this._control = _control;
+        this.mdKeyboard = 'es';
+        this.darkTheme = true;
     }
     /**
      * @return {?}

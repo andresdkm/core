@@ -1,8 +1,8 @@
-import { Directive, ElementRef, HostListener, Input, Optional, Self } from '@angular/core';
-import { MdInput } from '@angular/material';
-import { MdKeyboardRef } from '../utils/keyboard-ref.class';
-import { MdKeyboardComponent } from '../components/keyboard/keyboard.component';
-import { MdKeyboardService } from '../services/keyboard.service';
+import {Directive, ElementRef, HostListener, Input, Optional, Self} from '@angular/core';
+import {MdInput} from '@angular/material';
+import {MdKeyboardRef} from '../utils/keyboard-ref.class';
+import {MdKeyboardComponent} from '../components/keyboard/keyboard.component';
+import {MdKeyboardService} from '../services/keyboard.service';
 import {NgModel} from '@angular/forms';
 
 @Directive({
@@ -13,9 +13,9 @@ export class MdKeyboardModelDirective {
 
   private _keyboardRef: MdKeyboardRef<MdKeyboardComponent>;
 
-  @Input() mdKeyboard: string;
+  @Input() mdKeyboard: string = 'es';
 
-  @Input() darkTheme: boolean;
+  @Input() darkTheme: boolean = true;
 
   @Input() duration: number;
 
@@ -48,6 +48,7 @@ export class MdKeyboardModelDirective {
   constructor(private _elementRef: ElementRef,
               private _keyboardService: MdKeyboardService,
               private _model: NgModel,
-              @Optional() @Self() private _control?: MdInput) {}
+              @Optional() @Self() private _control?: MdInput) {
+  }
 
 }

@@ -11,9 +11,9 @@ export class MdKeyboardDirective {
 
   private _keyboardRef: MdKeyboardRef<MdKeyboardComponent>;
 
-  @Input() mdKeyboard: string;
+  @Input() mdKeyboard: string = 'es';
 
-  @Input() darkTheme: boolean;
+  @Input() darkTheme: boolean = true;
 
   @Input() duration: number;
 
