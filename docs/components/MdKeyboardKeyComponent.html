@@ -1451,7 +1451,9 @@ export class MdKeyboardKeyComponent implements OnInit {
       return;
     }
 
-    this.inputValue &#x3D; this.control.value;
+    if (this.control) {
+      this.inputValue &#x3D; this.control.value;
+    }
     // ^ this is used to not only get &quot;focus&quot;, but
     // to make sure we don&#x27;t have it everything -selected-
     // (it causes an issue in chrome, and having it doesn&#x27;t hurt any other browser)
