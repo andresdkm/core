@@ -1,5 +1,6 @@
 import { ElementRef, EventEmitter, OnInit } from '@angular/core';
 import { MdInput } from '@angular/material';
+import { NgModel } from '@angular/forms';
 export declare class MdKeyboardKeyComponent implements OnInit {
     private _deadkeys;
     private _icons;
@@ -7,6 +8,7 @@ export declare class MdKeyboardKeyComponent implements OnInit {
     private _iconKeys;
     key: string;
     active: boolean;
+    model: NgModel;
     input?: ElementRef;
     control?: MdInput;
     altClick: EventEmitter<void>;

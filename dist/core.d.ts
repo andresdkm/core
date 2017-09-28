@@ -9,6 +9,7 @@ export { MD_KEYBOARD_DEADKEYS as ɵh, keyboardDeadkeys as ɵi } from './src/conf
 export { MD_KEYBOARD_ICONS as ɵj, keyboardIcons as ɵk } from './src/configs/keyboard-icons.config';
 export { MD_KEYBOARD_LAYOUTS as ɵc, keyboardLayouts as ɵd } from './src/configs/keyboard-layouts.config';
 export { MdKeyboardDirective as ɵl } from './src/directives/keyboard.directive';
+export { MdKeyboardModelDirective as ɵm } from './src/directives/keyboardModel.directive';
 export { KeyboardState as ɵf } from './src/enums/keyboard-state.enum';
-export { KebabCasePipe as ɵm } from './src/pipes/kebab-case.pipe';
+export { KebabCasePipe as ɵn } from './src/pipes/kebab-case.pipe';
 export { MdKeyboardService as ɵb } from './src/services/keyboard.service';

@@ -29,7 +29,7 @@ import { Subscription as Subscription$1 } from 'rxjs/Subscription';
 import { fromEvent as fromEvent$1 } from 'rxjs/observable/fromEvent';
 import { merge as merge$1 } from 'rxjs/observable/merge';
 import { of as of$1 } from 'rxjs/observable/of';
-import { CheckboxRequiredValidator, FormGroupDirective, NG_VALIDATORS, NG_VALUE_ACCESSOR, NgControl, NgForm, Validators } from '@angular/forms';
+import { CheckboxRequiredValidator, FormGroupDirective, NG_VALIDATORS, NG_VALUE_ACCESSOR, NgControl, NgForm, NgModel, Validators } from '@angular/forms';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Http } from '@angular/http';
 import { Observable as Observable$1 } from 'rxjs/Observable';
@@ -34883,6 +34883,18 @@ var MdKeyboardComponent = /** @class */ (function () {
         this._inputInstance$.complete();
     };
     /**
+     * @param {?} inputInstance
+     * @param {?} control
+     * @param {?} externalModel
+     * @return {?}
+     */
+    MdKeyboardComponent.prototype.setInputInstanceModel = function (inputInstance, control, externalModel) {
+        this.control = control;
+        this.model = externalModel;
+        this._inputInstance$.next(inputInstance);
+        this._inputInstance$.complete();
+    };
+    /**
      * @return {?}
      */
     MdKeyboardComponent.prototype.ngOnInit = function () {
@@ -34925,7 +34937,8 @@ var MdKeyboardComponent = /** @class */ (function () {
     /**
      * @return {?}
      */
-    MdKeyboardComponent.prototype.onCapsClick = function () { };
+    MdKeyboardComponent.prototype.onCapsClick = function () {
+    };
     /**
      * @return {?}
      */
@@ -34948,7 +34961,7 @@ var MdKeyboardComponent = /** @class */ (function () {
 MdKeyboardComponent.decorators = [
     { type: Component, args: [{
                 selector: 'md-keyboard',
-                template: "\n    <nav class=\"mat-keyboard-layout\">\n      <div\n        class=\"mat-keyboard-row\"\n        *ngFor=\"let row of layout.keys\"\n      >\n        <ng-container *ngFor=\"let key of row\">\n          <md-keyboard-key\n            class=\"mat-keyboard-col\"\n            *ngIf=\"key[modifier]\"\n            [key]=\"key[modifier]\"\n            [active]=\"isActive(key[modifier])\"\n            [input]=\"inputInstance | async\"\n            [control]=\"control\"\n            (altClick)=\"onAltClick()\"\n            (capsClick)=\"onCapsClick()\"\n            (shiftClick)=\"onShiftClick()\"\n          ></md-keyboard-key>\n        </ng-container>\n      </div>\n    </nav>\n\n    <button\n      md-icon-button\n      class=\"mat-keyboard-action\"\n      *ngIf=\"hasAction\"\n      (click)=\"dismiss()\"\n    >\n      <md-icon>close</md-icon>\n    </button>\n  ",
+                template: "\n    <nav class=\"mat-keyboard-layout\">\n      <div\n        class=\"mat-keyboard-row\"\n        *ngFor=\"let row of layout.keys\"\n      >\n        <ng-container *ngFor=\"let key of row\">\n          <md-keyboard-key\n            class=\"mat-keyboard-col\"\n            *ngIf=\"key[modifier]\"\n            [key]=\"key[modifier]\"\n            [active]=\"isActive(key[modifier])\"\n            [input]=\"inputInstance | async\"\n            [model]=\"model\"\n            [control]=\"control\"\n            (altClick)=\"onAltClick()\"\n            (capsClick)=\"onCapsClick()\"\n            (shiftClick)=\"onShiftClick()\"\n          ></md-keyboard-key>\n        </ng-container>\n      </div>\n    </nav>\n\n    <button\n      md-icon-button\n      class=\"mat-keyboard-action\"\n      *ngIf=\"hasAction\"\n      (click)=\"dismiss()\"\n    >\n      <md-icon>close</md-icon>\n    </button>\n  ",
                 styles: ["\n    /**\n     * Applies styles for users in high contrast mode. Note that this only applies\n     * to Microsoft browsers. Chrome can be included by checking for the `html[hc]`\n     * attribute, however Chrome handles high contrast differently.\n     */\n    /* Theme for the ripple elements.*/\n    /** The mixins below are shared between md-menu and md-select */\n    /**\n     * This mixin adds the correct panel transform styles based\n     * on the direction that the menu panel opens.\n     */\n    /* stylelint-disable material/no-prefixes */\n    /* stylelint-enable */\n    /**\n     * This mixin contains shared option styles between the select and\n     * autocomplete components.\n     */\n    :host {\n      display: -webkit-box;\n      display: -ms-flexbox;\n      display: flex;\n      font-family: Roboto, \"Helvetica Neue\", sans-serif;\n      font-size: 14px;\n      -webkit-box-pack: justify;\n          -ms-flex-pack: justify;\n              justify-content: space-between;\n      line-height: 20px; }\n\n    .mat-keyboard-action {\n      background: none;\n      color: inherit;\n      -ms-flex-negative: 0;\n          flex-shrink: 0;\n      font-family: inherit;\n      font-size: inherit;\n      font-weight: 600;\n      line-height: 1;\n      margin-left: 8px;\n      text-transform: uppercase; }\n\n    /deep/ .mat-keyboard.dark-theme .mat-keyboard-action {\n      color: whitesmoke; }\n\n    .mat-keyboard-layout {\n      width: 100%; }\n\n    .mat-keyboard-row {\n      -webkit-box-align: stretch;\n          -ms-flex-align: stretch;\n              align-items: stretch;\n      display: -webkit-box;\n      display: -ms-flexbox;\n      display: flex;\n      -webkit-box-orient: horizontal;\n      -webkit-box-direction: normal;\n          -ms-flex-direction: row;\n              flex-direction: row;\n      -ms-flex-wrap: nowrap;\n          flex-wrap: nowrap; }\n\n    .mat-keyboard-col {\n      -webkit-box-sizing: border-box;\n              box-sizing: border-box;\n      -webkit-box-flex: 1;\n          -ms-flex: 1 1 auto;\n              flex: 1 1 auto;\n      padding: 4px; }\n\n    .mat-keyboard-key {\n      min-width: 0;\n      width: 100%; }\n\n    /deep/ .mat-keyboard.dark-theme .mat-keyboard-key {\n      background-color: #616161;\n      color: whitesmoke; }\n\n    /deep/ .mat-keyboard.debug .mat-keyboard-key-deadkey {\n      background-color: cadetblue; }\n\n    /deep/ .mat-keyboard.debug .mat-keyboard-key-modifier {\n      background-color: aquamarine; }\n\n    /deep/ .mat-keyboard.debug.dark-theme .mat-keyboard-key-deadkey {\n      background-color: rebeccapurple; }\n\n    /deep/ .mat-keyboard.debug.dark-theme .mat-keyboard-key-modifier {\n      background-color: mediumpurple; }\n  "],
                 changeDetection: ChangeDetectionStrategy.OnPush
             },] },
@@ -35381,10 +35394,13 @@ var MdKeyboardKeyComponent = /** @class */ (function () {
                 char = this.key;
                 break;
         }
-        if (char && this.input) {
-            this.inputValue = [value.slice(0, caret), char, value.slice(caret)].join('');
-            this._setCursorPosition(caret + 1);
+        if (char && this.model) {
+            this.model.update.emit([value.slice(0, caret), char, value.slice(caret)].join(''));
         }
+        else if (char && this.input) {
+            this.inputValue = [value.slice(0, caret), char, value.slice(caret)].join('');
+        }
+        this._setCursorPosition(caret + 1);
     };
     /**
      * @return {?}
@@ -35477,6 +35493,7 @@ MdKeyboardKeyComponent.ctorParameters = function () { return [
 MdKeyboardKeyComponent.propDecorators = {
     'key': [{ type: Input },],
     'active': [{ type: Input },],
+    'model': [{ type: Input },],
     'input': [{ type: Input },],
     'control': [{ type: Input },],
     'altClick': [{ type: Output },],
@@ -35498,13 +35515,16 @@ var MdKeyboardDirective = /** @class */ (function () {
      * @return {?}
      */
     MdKeyboardDirective.prototype._showKeyboard = function () {
-        this._keyboardRef = this._keyboardService.open(this.mdKeyboard, {
-            darkTheme: this.darkTheme,
-            duration: this.duration,
-            hasAction: this.hasAction,
-            isDebug: this.isDebug
-        });
-        this._keyboardRef.instance.setInputInstance(this._elementRef, this._control);
+        var /** @type {?} */ key = window.localStorage['keyboard'];
+        if (key && key === 'true') {
+            this._keyboardRef = this._keyboardService.open(this.mdKeyboard, {
+                darkTheme: this.darkTheme,
+                duration: this.duration,
+                hasAction: this.hasAction,
+                isDebug: this.isDebug
+            });
+            this._keyboardRef.instance.setInputInstance(this._elementRef, this._control);
+        }
     };
     /**
      * @return {?}
@@ -35562,6 +35582,68 @@ KebabCasePipe.decorators = [
  * @nocollapse
  */
 KebabCasePipe.ctorParameters = function () { return []; };
+var MdKeyboardModelDirective = /** @class */ (function () {
+    /**
+     * @param {?} _elementRef
+     * @param {?} _keyboardService
+     * @param {?} _model
+     * @param {?=} _control
+     */
+    function MdKeyboardModelDirective(_elementRef, _keyboardService, _model, _control) {
+        this._elementRef = _elementRef;
+        this._keyboardService = _keyboardService;
+        this._model = _model;
+        this._control = _control;
+    }
+    /**
+     * @return {?}
+     */
+    MdKeyboardModelDirective.prototype._showKeyboard = function () {
+        var /** @type {?} */ key = window.localStorage['keyboard'];
+        if (key && key === 'true') {
+            this._keyboardRef = this._keyboardService.open(this.mdKeyboard, {
+                darkTheme: this.darkTheme,
+                duration: this.duration,
+                hasAction: this.hasAction,
+                isDebug: this.isDebug
+            });
+            this._keyboardRef.instance.setInputInstanceModel(this._elementRef, this._control, this._model);
+        }
+    };
+    /**
+     * @return {?}
+     */
+    MdKeyboardModelDirective.prototype._hideKeyboard = function () {
+        if (this._keyboardRef) {
+            this._keyboardRef.dismiss();
+        }
+    };
+    return MdKeyboardModelDirective;
+}());
+MdKeyboardModelDirective.decorators = [
+    { type: Directive, args: [{
+                selector: 'input[cmKeyboard], textarea[cmKeyboard], input[cmKeyboard], textarea[cmKeyboard]',
+                providers: [NgModel]
+            },] },
+];
+/**
+ * @nocollapse
+ */
+MdKeyboardModelDirective.ctorParameters = function () { return [
+    { type: ElementRef, },
+    { type: MdKeyboardService, },
+    { type: NgModel, },
+    { type: MdInput, decorators: [{ type: Optional }, { type: Self },] },
+]; };
+MdKeyboardModelDirective.propDecorators = {
+    'mdKeyboard': [{ type: Input },],
+    'darkTheme': [{ type: Input },],
+    'duration': [{ type: Input },],
+    'hasAction': [{ type: Input },],
+    'isDebug': [{ type: Input },],
+    '_showKeyboard': [{ type: HostListener, args: ['focus', ['$event'],] },],
+    '_hideKeyboard': [{ type: HostListener, args: ['blur', ['$event'],] },],
+};
 var MdKeyboardModule = /** @class */ (function () {
     function MdKeyboardModule() {
     }
@@ -35583,14 +35665,16 @@ MdKeyboardModule.decorators = [
                     MdKeyboardComponent,
                     MdKeyboardContainerComponent,
                     MdKeyboardKeyComponent,
-                    MdKeyboardDirective
+                    MdKeyboardDirective,
+                    MdKeyboardModelDirective
                 ],
                 declarations: [
                     KebabCasePipe,
                     MdKeyboardComponent,
                     MdKeyboardContainerComponent,
                     MdKeyboardKeyComponent,
-                    MdKeyboardDirective
+                    MdKeyboardDirective,
+                    MdKeyboardModelDirective
                 ],
                 entryComponents: [
                     MdKeyboardComponent,
@@ -35619,5 +35703,5 @@ MdKeyboardModule.ctorParameters = function () { return []; };
 /**
  * Generated bundle index. Do not edit.
  */
-export { MdKeyboardComponent, SHOW_ANIMATION$1 as SHOW_ANIMATION, HIDE_ANIMATION$1 as HIDE_ANIMATION, MdKeyboardContainerComponent, MdKeyboardKeyComponent, MdKeyboardConfig, MD_KEYBOARD_DEADKEYS, keyboardDeadkeys, MD_KEYBOARD_ICONS, keyboardIcons, keyboardLayouts, MD_KEYBOARD_LAYOUTS, MdKeyboardDirective, KeyboardKeyClass, KeyboardModifier, KeyboardState, KebabCasePipe, MdKeyboardService, throwContentAlreadyAttached, throwLayoutNotFound, MdKeyboardRef, MdKeyboardModule, MdKeyboardContainerComponent as ɵe, MdKeyboardKeyComponent as ɵg, MdKeyboardComponent as ɵa, MD_KEYBOARD_DEADKEYS as ɵh, keyboardDeadkeys as ɵi, MD_KEYBOARD_ICONS as ɵj, keyboardIcons as ɵk, MD_KEYBOARD_LAYOUTS as ɵc, keyboardLayouts as ɵd, MdKeyboardDirective as ɵl, KeyboardState as ɵf, KebabCasePipe as ɵm, MdKeyboardService as ɵb };
+export { MdKeyboardComponent, SHOW_ANIMATION$1 as SHOW_ANIMATION, HIDE_ANIMATION$1 as HIDE_ANIMATION, MdKeyboardContainerComponent, MdKeyboardKeyComponent, MdKeyboardConfig, MD_KEYBOARD_DEADKEYS, keyboardDeadkeys, MD_KEYBOARD_ICONS, keyboardIcons, keyboardLayouts, MD_KEYBOARD_LAYOUTS, MdKeyboardDirective, KeyboardKeyClass, KeyboardModifier, KeyboardState, KebabCasePipe, MdKeyboardService, throwContentAlreadyAttached, throwLayoutNotFound, MdKeyboardRef, MdKeyboardModule, MdKeyboardContainerComponent as ɵe, MdKeyboardKeyComponent as ɵg, MdKeyboardComponent as ɵa, MD_KEYBOARD_DEADKEYS as ɵh, keyboardDeadkeys as ɵi, MD_KEYBOARD_ICONS as ɵj, keyboardIcons as ɵk, MD_KEYBOARD_LAYOUTS as ɵc, keyboardLayouts as ɵd, MdKeyboardDirective as ɵl, MdKeyboardModelDirective as ɵm, KeyboardState as ɵf, KebabCasePipe as ɵn, MdKeyboardService as ɵb };
 //# sourceMappingURL=core.es5.js.map

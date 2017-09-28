@@ -13,6 +13,7 @@ import { keyboardLayouts, MD_KEYBOARD_LAYOUTS } from './configs/keyboard-layouts
 import { MdKeyboardDirective } from './directives/keyboard.directive';
 import { KebabCasePipe } from './pipes/kebab-case.pipe';
 import { MdKeyboardService } from './services/keyboard.service';
+import {MdKeyboardModelDirective} from "./directives/keyboardModel.directive";
 
 @NgModule({
   imports: [
@@ -29,14 +30,16 @@ import { MdKeyboardService } from './services/keyboard.service';
     MdKeyboardComponent,
     MdKeyboardContainerComponent,
     MdKeyboardKeyComponent,
-    MdKeyboardDirective
+    MdKeyboardDirective,
+    MdKeyboardModelDirective
   ],
   declarations: [
     KebabCasePipe,
     MdKeyboardComponent,
     MdKeyboardContainerComponent,
     MdKeyboardKeyComponent,
-    MdKeyboardDirective
+    MdKeyboardDirective,
+    MdKeyboardModelDirective
   ],
   entryComponents: [
     MdKeyboardComponent,

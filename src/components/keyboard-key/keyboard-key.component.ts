@@ -1,8 +1,18 @@
-import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Inject, Input, OnInit, Output } from '@angular/core';
-import { MdInput } from '@angular/material';
-import { KeyboardKeyClass } from '../../enums/keyboard-key-class.enum';
-import { MD_KEYBOARD_DEADKEYS } from '../../configs/keyboard-deadkey.config';
-import { MD_KEYBOARD_ICONS } from '../../configs/keyboard-icons.config';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Inject,
+  Input,
+  OnInit,
+  Output
+} from '@angular/core';
+import {MdInput} from '@angular/material';
+import {KeyboardKeyClass} from '../../enums/keyboard-key-class.enum';
+import {MD_KEYBOARD_DEADKEYS} from '../../configs/keyboard-deadkey.config';
+import {MD_KEYBOARD_ICONS} from '../../configs/keyboard-icons.config';
+import {NgModel} from '@angular/forms';
 
 @Component({
   selector: 'md-keyboard-key',
@@ -19,6 +29,8 @@ export class MdKeyboardKeyComponent implements OnInit {
   @Input() key: string;
 
   @Input() active: boolean;
+
+  @Input() model: NgModel;
 
   @Input() input?: ElementRef;
 
@@ -153,10 +165,13 @@ export class MdKeyboardKeyComponent implements OnInit {
         break;
     }
 
-    if (char && this.input) {
+    if (char && this.model) {
+      this.model.update.emit([value.slice(0, caret), char, value.slice(caret)].join(''));
+    } else if (char && this.input) {
       this.inputValue = [value.slice(0, caret), char, value.slice(caret)].join('');
-      this._setCursorPosition(caret + 1);
     }
+    this._setCursorPosition(caret + 1);
+
   }
 
   private _triggerKeyEvent(): Event {

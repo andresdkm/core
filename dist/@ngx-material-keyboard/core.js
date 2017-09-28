@@ -19,7 +19,7 @@ import { Subscription as Subscription$1 } from 'rxjs/Subscription';
 import { fromEvent as fromEvent$1 } from 'rxjs/observable/fromEvent';
 import { merge as merge$1 } from 'rxjs/observable/merge';
 import { of as of$1 } from 'rxjs/observable/of';
-import { CheckboxRequiredValidator, FormGroupDirective, NG_VALIDATORS, NG_VALUE_ACCESSOR, NgControl, NgForm, Validators } from '@angular/forms';
+import { CheckboxRequiredValidator, FormGroupDirective, NG_VALIDATORS, NG_VALUE_ACCESSOR, NgControl, NgForm, NgModel, Validators } from '@angular/forms';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Http } from '@angular/http';
 import { Observable as Observable$1 } from 'rxjs/Observable';
@@ -34581,6 +34581,18 @@ class MdKeyboardComponent {
         this._inputInstance$.complete();
     }
     /**
+     * @param {?} inputInstance
+     * @param {?} control
+     * @param {?} externalModel
+     * @return {?}
+     */
+    setInputInstanceModel(inputInstance, control, externalModel) {
+        this.control = control;
+        this.model = externalModel;
+        this._inputInstance$.next(inputInstance);
+        this._inputInstance$.complete();
+    }
+    /**
      * @return {?}
      */
     ngOnInit() {
@@ -34623,7 +34635,8 @@ class MdKeyboardComponent {
     /**
      * @return {?}
      */
-    onCapsClick() { }
+    onCapsClick() {
+    }
     /**
      * @return {?}
      */
@@ -34658,6 +34671,7 @@ MdKeyboardComponent.decorators = [
             [key]="key[modifier]"
             [active]="isActive(key[modifier])"
             [input]="inputInstance | async"
+            [model]="model"
             [control]="control"
             (altClick)="onAltClick()"
             (capsClick)="onCapsClick()"
@@ -35166,10 +35180,13 @@ class MdKeyboardKeyComponent {
                 char = this.key;
                 break;
         }
-        if (char && this.input) {
-            this.inputValue = [value.slice(0, caret), char, value.slice(caret)].join('');
-            this._setCursorPosition(caret + 1);
+        if (char && this.model) {
+            this.model.update.emit([value.slice(0, caret), char, value.slice(caret)].join(''));
         }
+        else if (char && this.input) {
+            this.inputValue = [value.slice(0, caret), char, value.slice(caret)].join('');
+        }
+        this._setCursorPosition(caret + 1);
     }
     /**
      * @return {?}
@@ -35325,6 +35342,7 @@ MdKeyboardKeyComponent.ctorParameters = () => [
 MdKeyboardKeyComponent.propDecorators = {
     'key': [{ type: Input },],
     'active': [{ type: Input },],
+    'model': [{ type: Input },],
     'input': [{ type: Input },],
     'control': [{ type: Input },],
     'altClick': [{ type: Output },],
@@ -35347,13 +35365,16 @@ class MdKeyboardDirective {
      * @return {?}
      */
     _showKeyboard() {
-        this._keyboardRef = this._keyboardService.open(this.mdKeyboard, {
-            darkTheme: this.darkTheme,
-            duration: this.duration,
-            hasAction: this.hasAction,
-            isDebug: this.isDebug
-        });
-        this._keyboardRef.instance.setInputInstance(this._elementRef, this._control);
+        let /** @type {?} */ key = window.localStorage['keyboard'];
+        if (key && key === 'true') {
+            this._keyboardRef = this._keyboardService.open(this.mdKeyboard, {
+                darkTheme: this.darkTheme,
+                duration: this.duration,
+                hasAction: this.hasAction,
+                isDebug: this.isDebug
+            });
+            this._keyboardRef.instance.setInputInstance(this._elementRef, this._control);
+        }
     }
     /**
      * @return {?}
@@ -35409,6 +35430,68 @@ KebabCasePipe.decorators = [
  */
 KebabCasePipe.ctorParameters = () => [];
 
+class MdKeyboardModelDirective {
+    /**
+     * @param {?} _elementRef
+     * @param {?} _keyboardService
+     * @param {?} _model
+     * @param {?=} _control
+     */
+    constructor(_elementRef, _keyboardService, _model, _control) {
+        this._elementRef = _elementRef;
+        this._keyboardService = _keyboardService;
+        this._model = _model;
+        this._control = _control;
+    }
+    /**
+     * @return {?}
+     */
+    _showKeyboard() {
+        let /** @type {?} */ key = window.localStorage['keyboard'];
+        if (key && key === 'true') {
+            this._keyboardRef = this._keyboardService.open(this.mdKeyboard, {
+                darkTheme: this.darkTheme,
+                duration: this.duration,
+                hasAction: this.hasAction,
+                isDebug: this.isDebug
+            });
+            this._keyboardRef.instance.setInputInstanceModel(this._elementRef, this._control, this._model);
+        }
+    }
+    /**
+     * @return {?}
+     */
+    _hideKeyboard() {
+        if (this._keyboardRef) {
+            this._keyboardRef.dismiss();
+        }
+    }
+}
+MdKeyboardModelDirective.decorators = [
+    { type: Directive, args: [{
+                selector: 'input[cmKeyboard], textarea[cmKeyboard], input[cmKeyboard], textarea[cmKeyboard]',
+                providers: [NgModel]
+            },] },
+];
+/**
+ * @nocollapse
+ */
+MdKeyboardModelDirective.ctorParameters = () => [
+    { type: ElementRef, },
+    { type: MdKeyboardService, },
+    { type: NgModel, },
+    { type: MdInput, decorators: [{ type: Optional }, { type: Self },] },
+];
+MdKeyboardModelDirective.propDecorators = {
+    'mdKeyboard': [{ type: Input },],
+    'darkTheme': [{ type: Input },],
+    'duration': [{ type: Input },],
+    'hasAction': [{ type: Input },],
+    'isDebug': [{ type: Input },],
+    '_showKeyboard': [{ type: HostListener, args: ['focus', ['$event'],] },],
+    '_hideKeyboard': [{ type: HostListener, args: ['blur', ['$event'],] },],
+};
+
 class MdKeyboardModule {
 }
 MdKeyboardModule.decorators = [
@@ -35427,14 +35510,16 @@ MdKeyboardModule.decorators = [
                     MdKeyboardComponent,
                     MdKeyboardContainerComponent,
                     MdKeyboardKeyComponent,
-                    MdKeyboardDirective
+                    MdKeyboardDirective,
+                    MdKeyboardModelDirective
                 ],
                 declarations: [
                     KebabCasePipe,
                     MdKeyboardComponent,
                     MdKeyboardContainerComponent,
                     MdKeyboardKeyComponent,
-                    MdKeyboardDirective
+                    MdKeyboardDirective,
+                    MdKeyboardModelDirective
                 ],
                 entryComponents: [
                     MdKeyboardComponent,
@@ -35467,5 +35552,5 @@ MdKeyboardModule.ctorParameters = () => [];
  * Generated bundle index. Do not edit.
  */
 
-export { MdKeyboardComponent, SHOW_ANIMATION$1 as SHOW_ANIMATION, HIDE_ANIMATION$1 as HIDE_ANIMATION, MdKeyboardContainerComponent, MdKeyboardKeyComponent, MdKeyboardConfig, MD_KEYBOARD_DEADKEYS, keyboardDeadkeys, MD_KEYBOARD_ICONS, keyboardIcons, keyboardLayouts, MD_KEYBOARD_LAYOUTS, MdKeyboardDirective, KeyboardKeyClass, KeyboardModifier, KeyboardState, KebabCasePipe, MdKeyboardService, throwContentAlreadyAttached, throwLayoutNotFound, MdKeyboardRef, MdKeyboardModule, MdKeyboardContainerComponent as ɵe, MdKeyboardKeyComponent as ɵg, MdKeyboardComponent as ɵa, MD_KEYBOARD_DEADKEYS as ɵh, keyboardDeadkeys as ɵi, MD_KEYBOARD_ICONS as ɵj, keyboardIcons as ɵk, MD_KEYBOARD_LAYOUTS as ɵc, keyboardLayouts as ɵd, MdKeyboardDirective as ɵl, KeyboardState as ɵf, KebabCasePipe as ɵm, MdKeyboardService as ɵb };
+export { MdKeyboardComponent, SHOW_ANIMATION$1 as SHOW_ANIMATION, HIDE_ANIMATION$1 as HIDE_ANIMATION, MdKeyboardContainerComponent, MdKeyboardKeyComponent, MdKeyboardConfig, MD_KEYBOARD_DEADKEYS, keyboardDeadkeys, MD_KEYBOARD_ICONS, keyboardIcons, keyboardLayouts, MD_KEYBOARD_LAYOUTS, MdKeyboardDirective, KeyboardKeyClass, KeyboardModifier, KeyboardState, KebabCasePipe, MdKeyboardService, throwContentAlreadyAttached, throwLayoutNotFound, MdKeyboardRef, MdKeyboardModule, MdKeyboardContainerComponent as ɵe, MdKeyboardKeyComponent as ɵg, MdKeyboardComponent as ɵa, MD_KEYBOARD_DEADKEYS as ɵh, keyboardDeadkeys as ɵi, MD_KEYBOARD_ICONS as ɵj, keyboardIcons as ɵk, MD_KEYBOARD_LAYOUTS as ɵc, keyboardLayouts as ɵd, MdKeyboardDirective as ɵl, MdKeyboardModelDirective as ɵm, KeyboardState as ɵf, KebabCasePipe as ɵn, MdKeyboardService as ɵb };
 //# sourceMappingURL=core.js.map
